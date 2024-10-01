@@ -1,0 +1,31 @@
+# version: '3'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    volumes:
+      - mongo:/data/db
+    ports:
+      - 2717:27017
+
+  app:
+    build: ./server
+    container_name: nodejs
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+      DB_URI: mongodb://mongo:27017
+      DB_NAME: MEANStackDB
+    restart: always
+    depends_on:
+      - mongo
+
+  angular-app:
+    build: ./Angular6
+    container_name: angular-app
+    ports:
+      - 80:80
+
+volumes:
+  mongo: 
